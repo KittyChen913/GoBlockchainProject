@@ -30,6 +30,30 @@ func newBlock(nonce int, previousHash string) *Block {
 	return b
 }
 
+type Blockchain struct {
+	transactionPool []string // 交易池
+	chain           []*Block // 區塊鏈
+}
+
+func (bc *Blockchain) Print() {
+	for i, block := range bc.chain {
+		fmt.Printf("Chain: %d \n", i)
+		block.Print()
+	}
+}
+
+func NewBlockchain() *Blockchain {
+	bc := &Blockchain{}
+	bc.CreateBlock(0, "init hash")
+	return bc
+}
+
+func (bc *Blockchain) CreateBlock(nonce int, previousHash string) *Block {
+	b := newBlock(nonce, previousHash)
+	bc.chain = append(bc.chain, b)
+	return b
+}
+
 // init 函數用於初始化
 func init() {
 	log.SetPrefix("INFO: ")
@@ -39,6 +63,6 @@ func init() {
 func main() {
 	log.Println("Starting blockchain...")
 
-	b := newBlock(777, "init hash")
-	b.Print()
+	blockChain := NewBlockchain()
+	blockChain.Print()
 }
